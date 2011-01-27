@@ -1,0 +1,63 @@
+<html><script>
+
+var _last_selected = {}
+var _search_opened = {}
+
+function is_search_url(url){
+
+	return url.match(/http:\/\/www.google.\w+?\/search\?sourceid=chrome&.*?&q=.*/i);
+}
+
+
+chrome.tabs.onCreated.addListener(function (tab){
+
+	if(is_search_url(tab.url)){
+		_search_opened[tab.id] = new Date().getTime();
+	}
+
+
+});
+
+chrome.tabs.onRemoved.addListener(function (tabid){
+
+	if(tabid in _search_opened)
+		delete _search_opened[tabid];
+
+});
+
+
+chrome.tabs.onSelectionChanged.addListener(function(tabid, selectinfo) {
+
+
+	if((tabid in _search_opened) && (_search_opened[tabid] > (new Date().getTime() - 50))){
+
+		if(selectinfo.windowId in _last_selected)
+			chrome.tabs.update(_last_selected[selectinfo.windowId], {selected: true});
+	}
+	else{
+		_last_selected[selectinfo.windowId] = tabid;
+	}
+});
+
+
+chrome.windows.onRemoved.addListener(function(windowId){
+// 		console.log('WIN Removed ' + windowId);
+	if(windowId in _last_selected)
+		delete _last_selected[windowId];
+
+});
+
+
+
+chrome.windows.getCurrent(function(window){
+
+	chrome.tabs.getSelected(window.id, function (tab){
+
+		_last_selected[window.id] = tab.id;
+
+	});
+
+});
+
+</script>
+</html>
