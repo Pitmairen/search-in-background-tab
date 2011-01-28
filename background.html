@@ -1,17 +1,13 @@
-<html><script>
+<html><script type="text/javascript" src="utils.js"></script><script>
 
 var _last_selected = {}
 var _search_opened = {}
 
-function is_search_url(url){
-
-	return url.match(/http:\/\/www.google.\w+?\/search\?sourceid=chrome&.*?&q=.*/i);
-}
 
 
 chrome.tabs.onCreated.addListener(function (tab){
 
-	if(is_search_url(tab.url)){
+	if(Utils.is_search_url(tab.url)){
 		_search_opened[tab.id] = new Date().getTime();
 	}
 
@@ -41,7 +37,7 @@ chrome.tabs.onSelectionChanged.addListener(function(tabid, selectinfo) {
 
 
 chrome.windows.onRemoved.addListener(function(windowId){
-// 		console.log('WIN Removed ' + windowId);
+
 	if(windowId in _last_selected)
 		delete _last_selected[windowId];
 
