@@ -1,0 +1,111 @@
+<html>
+<head>
+	<title>Options</title>
+	<script type="text/javascript" src="utils.js"></script>
+	<script type="text/javascript">
+
+
+	var _timer = null;
+	function flash_updated(){
+		document.querySelector('#flash').style.opacity = 1;
+
+		if(_timer != null)
+			clearTimeout(_timer);
+
+		_timer = setTimeout(function(){
+			document.querySelector('#flash').style.opacity = 0;
+			_timer = null;
+		}, 2500);
+
+	}
+
+
+
+	chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+
+			if (request.act == "pattern_updated"){
+				document.querySelector('#pattern').value = request.pattern;
+				flash_updated();
+			}
+
+			sendResponse({});
+	});
+
+	function on_loaded(){
+
+		function update_pattern(p){
+			p.value = Utils.get_url_pattern();
+		}
+
+		var pattern = document.querySelector('#pattern');
+		update_pattern(pattern);
+
+		var test_search = document.querySelector('#test_search');
+		test_search.innerText = Utils.TEST_SEARCH;
+
+
+		var restore = document.querySelector('#restore');
+
+		restore.addEventListener('click', function(){
+
+			Utils.delete_url_pattern();
+			update_pattern(pattern);
+
+		}, false);
+
+
+		function on_change(){
+			Utils.set_url_pattern(this.value);
+		}
+
+		
+		pattern.addEventListener('change', on_change, false);
+		pattern.addEventListener('keyup', on_change, false);
+		pattern.addEventListener('paste', on_change, false);
+	}
+
+
+	document.addEventListener('DOMContentLoaded', on_loaded, false);
+
+	</script>
+	<style type="text/css">
+
+	body{
+		background: #f3f3f3;
+	}
+	#container{
+		min-width: 500px;
+		max-width: 1024px;
+		margin: 1em auto;
+	}
+	#flash{
+		opacity: 0;
+		background: #D7F0A8;
+		padding: 0.5em;
+		margin-bottom: 1em;
+		-webkit-transition: all 1s;
+	}
+	#test_search_box{
+		padding: 0.5em;
+		background: #fafafa;
+		border: 1px solid #aaa;
+	}
+	</style>
+</head>
+<body>
+<div id="container">
+
+	<div id="flash">Pattern has been updated</div>
+
+	<p>This is the regular expression that is used to figure out if a new search tab has been opened. If you understand regular expressions you can edit this manually, if not see the other option below.</p>
+	<input id="pattern" type="text" value="" size="112" /> <input id="restore" type="button" value="Restore Default" />
+
+	<p>If you don't know regular expressions you can instead select all the text in the box below, right click and click the search option in the context menu. If everything
+	works the regular expression should automatically be updated and the extension should work.</p>
+	
+	<div id="test_search_box">
+	<p><strong id="test_search"></strong></p>
+	</div>
+</div>
+</body>
+</html>
