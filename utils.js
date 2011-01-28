@@ -33,7 +33,7 @@ var Utils = {
 	
 	is_search_url : function(url){
 
-		if(url.indexOf(TEST_SEARCH) != -1){
+		if(this.is_test_search_url(url)){
 			pat = this.escape_regexp(url);
 			pat = pat.replace(new RegExp(this.TEST_SEARCH, 'g'), '.*?');
 			this.set_url_pattern(pat);
@@ -43,7 +43,10 @@ var Utils = {
 			return true;
 		}
 		return Boolean(url.match(this.get_url_regexp()));
-	}
+	},
 
+	is_test_search_url : function(url){
+		return url.indexOf(this.TEST_SEARCH) != -1;
+	}
 
 }

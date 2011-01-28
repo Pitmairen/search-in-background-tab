@@ -27,8 +27,16 @@ chrome.tabs.onSelectionChanged.addListener(function(tabid, selectinfo) {
 
 	if((tabid in _search_opened) && (_search_opened[tabid] > (new Date().getTime() - 50))){
 
-		if(selectinfo.windowId in _last_selected)
+		if(selectinfo.windowId in _last_selected){
+
 			chrome.tabs.update(_last_selected[selectinfo.windowId], {selected: true});
+
+			chrome.tabs.get(tabid, function(tab){
+				if(Utils.is_test_search_url(tab.url))
+					chrome.tabs.remove(tab.id);
+			});
+
+		}
 	}
 	else{
 		_last_selected[selectinfo.windowId] = tabid;
