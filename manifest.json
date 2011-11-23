@@ -1,6 +1,6 @@
 {
     "name": "Search in background tab",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Opens the \"Search google for\" search in a background tab.",
 	"icons": {
 		"48": "icon48.png",
