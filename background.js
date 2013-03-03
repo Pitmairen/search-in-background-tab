@@ -1,4 +1,3 @@
-<html><script type="text/javascript" src="utils.js"></script><script>
 
 var _last_selected = {}
 var _search_opened = {}
@@ -63,5 +62,3 @@ chrome.windows.getCurrent(function(window){
 
 });
 
-</script>
-</html>
