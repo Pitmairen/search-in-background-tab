@@ -1,7 +1,7 @@
 
 var Utils = {
 	TEST_SEARCH : 'fdmKp5WB8ZHmItVEaaoGUjVsdgFpGSoz3opDi5g5CyunHVGyy8dMWpM',
-	DEFAULT_PATTERN : 'http://www\\.google\\.\\w+?/search\\?.*?&sourceid=chrome&.*?&q=.*',
+	DEFAULT_PATTERN : 'https://www\\.google\\.\\w+?/search\\?q=.*?&aq=f&.*?&sourceid=chrome.*',
 
 	get_url_pattern: function(){
 
@@ -36,7 +36,8 @@ var Utils = {
 		if(this.is_test_search_url(url)){
 			pat = this.escape_regexp(url);
 			pat = pat.replace(new RegExp(this.TEST_SEARCH, 'g'), '.*?');
-			pat = pat.replace(/gcx=\w+/, 'gcx=.*?');
+			pat = pat.replace(/gcx=\w+/ig, 'gcx=.*?');
+			pat = pat.replace(/aqs=[\.\w\d\\]+/gi, 'aqs=.*?');
 			this.set_url_pattern(pat);
 
 			chrome.extension.sendRequest({act:'pattern_updated', pattern:pat});
