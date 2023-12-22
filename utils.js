@@ -1,7 +1,7 @@
 
 var Utils = {
 	TEST_SEARCH : 'fdmKp5WB8ZHmItVEaaoGUjVsdgFpGSoz3opDi5g5CyunHVGyy8dMWpM',
-	DEFAULT_PATTERN : 'https://www\\.google\\.\\w+?/search\\?q=.*?&aq=f&.*?&sourceid=chrome.*',
+	DEFAULT_PATTERN : 'https://www\\.google\\.\\w+?/search\\?q=.*?&sourceid=chrome.*',
 
 	get_url_pattern: function(){
 

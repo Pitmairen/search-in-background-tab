@@ -6,7 +6,7 @@ var _search_opened = {}
 
 chrome.tabs.onCreated.addListener(function (tab){
 
-	if(Utils.is_search_url(tab.url)){
+	if(Utils.is_search_url(tab.url || tab.pendingUrl)){
 		_search_opened[tab.id] = new Date().getTime();
 	}
 
@@ -21,24 +21,23 @@ chrome.tabs.onRemoved.addListener(function (tabid){
 });
 
 
-chrome.tabs.onSelectionChanged.addListener(function(tabid, selectinfo) {
+chrome.tabs.onActivated.addListener(function(activeInfo) {
 
+	if((activeInfo.tabId in _search_opened) && (_search_opened[activeInfo.tabId] > (new Date().getTime() - 50))){
 
-	if((tabid in _search_opened) && (_search_opened[tabid] > (new Date().getTime() - 50))){
+		if(activeInfo.windowId in _last_selected){
 
-		if(selectinfo.windowId in _last_selected){
+			chrome.tabs.update(_last_selected[activeInfo.windowId], {selected: true});
 
-			chrome.tabs.update(_last_selected[selectinfo.windowId], {selected: true});
-
-			chrome.tabs.get(tabid, function(tab){
-				if(Utils.is_test_search_url(tab.url))
+			chrome.tabs.get(activeInfo.tabId, function(tab){
+				if(Utils.is_test_search_url(tab.url || tab.pendingUrl))
 					chrome.tabs.remove(tab.id);
 			});
 
 		}
 	}
 	else{
-		_last_selected[selectinfo.windowId] = tabid;
+		_last_selected[activeInfo.windowId] = activeInfo.tabId;
 	}
 });
 
