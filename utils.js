@@ -29,6 +29,10 @@ export const Utils = {
 
 	is_search_url : async function(url){
 
+		if(!url){
+			return false
+		}
+
 		if(this.is_test_search_url(url)){
 			let pat = this.escape_regexp(url);
 			pat = pat.replace(new RegExp(this.TEST_SEARCH, 'g'), '.*?');
@@ -44,6 +48,9 @@ export const Utils = {
 	},
 
 	is_test_search_url : function(url){
+		if(!url){
+			return false
+		}
 		return url.indexOf(this.TEST_SEARCH) != -1;
 	}
 }
