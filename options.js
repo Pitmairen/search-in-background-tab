@@ -1,5 +1,6 @@
+import { Utils } from "./utils.js";
 
-var _timer = null;
+let _timer = null;
 function flash_updated(){
 	document.querySelector('#flash').style.opacity = 1;
 
@@ -14,8 +15,7 @@ function flash_updated(){
 }
 
 
-
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 		if (request.act == "pattern_updated"){
 			document.querySelector('#pattern').value = request.pattern;
@@ -25,14 +25,14 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 		sendResponse({});
 });
 
-function on_loaded(){
+async function on_loaded(){
 
-	function update_pattern(p){
-		p.value = Utils.get_url_pattern();
+	async function update_pattern(p){
+		p.value = await Utils.get_url_pattern();
 	}
 
 	var pattern = document.querySelector('#pattern');
-	update_pattern(pattern);
+	await update_pattern(pattern);
 
 	var test_search = document.querySelector('#test_search');
 	test_search.innerText = Utils.TEST_SEARCH;
@@ -40,16 +40,16 @@ function on_loaded(){
 
 	var restore = document.querySelector('#restore');
 
-	restore.addEventListener('click', function(){
+	restore.addEventListener('click', async function(){
 
-		Utils.delete_url_pattern();
-		update_pattern(pattern);
+		await Utils.delete_url_pattern();
+		await update_pattern(pattern);
 
 	}, false);
 
 
-	function on_change(){
-		Utils.set_url_pattern(this.value);
+	async function on_change(){
+		await Utils.set_url_pattern(this.value);
 	}
 
 
@@ -60,5 +60,3 @@ function on_loaded(){
 
 
 document.addEventListener('DOMContentLoaded', on_loaded, false);
-
-

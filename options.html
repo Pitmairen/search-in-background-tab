@@ -1,8 +1,7 @@
 <html>
 <head>
 	<title>Options</title>
-	<script type="text/javascript" src="utils.js"></script>
-	<script type="text/javascript" src="options.js"></script>
+	<script type="module" src="options.js"></script>
 	<style type="text/css">
 
 	body{
@@ -25,19 +24,27 @@
 		background: #fafafa;
 		border: 1px solid #aaa;
 	}
+	#pattern{
+		width: 100%;
+	}
+	#restore{
+		margin-top: 0.5em;
+	}
 	</style>
 </head>
 <body>
 <div id="container">
 
-	<div id="flash">Pattern has been updated</div>
+	<div id="flash">Pattern has been updated. Searches should now be opened in a background tab.</div>
 
 	<p>This is the regular expression that is used to figure out if a new search tab has been opened. If you understand regular expressions you can edit this manually, if not see the other option below.</p>
-	<input id="pattern" type="text" value="" size="112" /> <input id="restore" type="button" value="Restore Default" />
+	<input id="pattern" type="text" value="" size="112" />
+	<input id="restore" type="button" value="Restore Default" />
 
 	<p>If you don't know regular expressions you can instead select all the text in the box below, right click and click the search option in the context menu. If everything
-	works the regular expression should automatically be updated and the extension should work.</p>
+	works the regular expression should automatically be updated and the extension should start working (Opening the searches in a background tab).</p>
 
+	<h4>Select the following string, right click and use "Search google for.." to automatically update the pattern:</h4>
 	<div id="test_search_box">
 	<p><strong id="test_search"></strong></p>
 	</div>
